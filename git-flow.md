@@ -15,7 +15,17 @@ We do not enforce any particular branch naming policy, but we recommend using pr
 - [Git Handbook](https://guides.github.com/introduction/git-handbook/): Quick introduction to Git.
 - [GitHub Git cheat sheet](https://education.github.com/git-cheat-sheet-education.pdf): 
   Contains examples of the most commonly used commands.
+- [Git presentation](http://vmarkovtsev.github.io/mipt_web_2015/02_git/index.html): 
+  Introductory tutorial illustrating the importance of using Git in a collaborative environment. Incorporates a summary of the essential commands, and helpful links to Git bibliography and interactive courses.
 - [Pro Git book](https://git-scm.com/book/en/v2): Contains everything there is to know about Git.
+
+#### Interactive labs
+Online courses and step-by-step demonstrations explaining the most popular Git commands and collaborative processes: 
+
+- [Fundamentals of Git](https://gitimmersion.com/lab_01.html)
+- [Git Branching](https://learngitbranching.js.org/)
+- [Resources to learn Git](https://try.github.io/)
+- [Staging, cloning, branching, and collaborating with Git](https://www.pluralsight.com/courses/code-school-git-real)
 
 ## 2. Development and Pull Requests
 Work on your local repository as you see fit. When the time comes to make the PR, rearrange your 
