@@ -17,61 +17,107 @@ This guide documents coding and style conventions for contributing to FragileTec
     5. Public methods
     6. Protected (`_`) methods
     7. Private (`__`) methods
-5. Use double quotes `"`. When a string contains single or double quote characters, however, use the other one to avoid
- backslashes in the string.
-6. Favor [f-strings](https://realpython.com/python-string-formatting/#3-string-interpolation-f-strings-python-36) 
-when printing variables inside a string.
+5. Use double quotes `"`. When a string contains single or double quote characters, however, 
+   use the other one to avoid backslashes in the string.
+6. Favor [f-strings](https://realpython.com/python-string-formatting/#3-string-interpolation-f-strings-python-36)
+   when printing variables inside a string.
 7. Do not use single letter argument names; use X and Y only in Scikit-learn context.
 9. Use [Google style](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html) for docstrings.
 10. Format of TODO and FIXME: `# TODO(mygithubuser): blah-blah-blah`.
 11. Add [Type hinting](https://docs.python.org/3/library/typing.html) when possible.
 12. Use standard [argparse](https://docs.python.org/3/library/argparse.html) for CLI interactions. 
-[Click](https://click.palletsprojects.com/en/7.x/arguments/) is also allowed when it improves the readability and maintainability of the code.
+[Click](https://click.palletsprojects.com/en/7.x/arguments/) is also allowed when it improves 
+    the readability and maintainability of the code.
 
 
 ## Useful tips
 
-1. **Each function should do only one thing**. If you find yourself writing a long function that does a lot of stuff, consider
-splitting it into different functions.
+1. **Each function should do only one thing**. If you write a long function that does a lot of stuff, 
+   consider splitting it into different functions.
 
-2. **Give variables a meaningful name**. If names became too long, use abbreviations. This abbreviations should be explained
-in comments when defining the variable for the first time.
+2. **Give variables a meaningful name**. If names became too long, use abbreviations. You should 
+   explain these abbreviations in comments when defining the variable for the first time.
 
-3. Keep in mind that coding is creating abstractions that hide complexity. This means that you should be able to get an
-idea of what a function does just by reading its documentation.   
+3. Keep in mind that coding is creating abstractions that hide complexity. This means that you 
+   should be able to get an idea of what a function does just by reading its documentation.   
 
-4. **Avoid meaningless comments**. Assume the person who is reading your code already know how to code in python, and take
-advantage of the syntax of the language to avoid using comments. For example, a comment is welcome when it can save you
-reading several lines of code that do stuff which is difficult to understand. 
+4. **Avoid meaningless comments**. Assume the person who is reading your code already know how 
+   to code in Python, and take advantage of the syntax of the language to avoid using comments. 
+   For example, a comment is welcome when it can save you reading several lines of code that do 
+   stuff which is difficult to understand. 
 
-5. **Document the functions**, and make sure that it is easy to understand what all the parameters are. When working with tensors
-and vectors, specify its dimensions when they are not obvious.
+5. **Document the functions**, and make sure that it is easy to understand what all the parameters are. 
+   When working with tensors and vectors, specify its dimensions when they are not obvious.
 
 6. **Follow the [Zen of Python](https://www.python.org/dev/peps/pep-0020/)**, it is your best friend.
 
-7. A well documented function lets you know what it does and how to use it without having to take a look at its code.
-**Document all the functions**! It is a pain in the ass but it pays off.
-
+7. A well-documented function lets you know what it does and how to use it without having to look 
+   at its code. **Document all the functions**! It is a pain in the ass, but it pays off.
+   
 ## Code formatting
 
 - We use [`black`](https://black.readthedocs.io/en/stable/change_log.html) for formatting the code. 
-Run `black .` before committing to automatically format the code in a consistent way.
+Run `make style` before committing to automatically format the code consistently.
+  
+### Avoid chaining several function calls
+
+Instead of 
+
+```python
+return do_another_thing(do_one_thing(param_1=val_1, param_2=val_2, param_3=value_3))
+```
+
+Use one of the following two options:
+
+Option 1:
+```python
+my_var = do_one_thing(param_1=val_1, param_2=val_2, param_3=value_3)
+another_var = do_another_thing(my_var)
+return another_var
+```
+Option 2:
+```python
+my_var = do_one_thing(param_1=val_1, param_2=val_2, param_3=value_3)
+return do_another_thing(my_var)
+```
+
+This way can name `my_var` to describe what `do_one_thing` is computing, so when other people read your code
+they can understand better what the function is computing.
+
+Option 1 also allows you to define additional information about what `do_another_thing` is doing. 
+This is optional (Option 2), because the type of object returned by `do_another_thing` will be specified 
+in the type hints of the function.
+
+However, there are a couple exception to this formatting rule:
+
+* You are chaining python operators:
+
+```python
+my_var = sum(map(lambda x: x ** 2, my_list_of_ints))
+```
+* You are casting the return value of the inner function into a given type:
+
+```python
+var_a = np.array(calculate_one_list(inputs))
+var_b = float(calculate_one_integer(inputs))
+```
+
+
 
 ### Separating blocks of code with blank lines
 
-Although using blank lines to separate code 
-blocks may seem like a good idea, it has the following drawbacks:
+Although using blank lines to separate code blocks may seem like a good idea, it has the following drawbacks:
 - It does not offer any information regarding how and why you are defining different blocks of code.
 - It makes code reviews more difficult: 
-    * It forces the reviewer to make assumptions about why you decided to create the different blocks.
-    * It removes context when showing possible suggestions about changes in the code.
+    * It forces the reviewer to make assumptions about why you created the different blocks.
+    * It removes context when showing plausible suggestions about changes in the code during code reviews.
     * Sparse code makes adds unnecessary scrolling time when reading the code.
     * Sparse code makes the code diffs less reliable.
     
-If you want to separate different code blocks inside the same function there are better alternatives:
-- **Write a comment** explaining what the code block you are defining with a blank line matters:
+If you want to separate different code blocks inside the same function, there are better alternatives:
+- **Write a comment** explaining what the code block you are separating with a blank line matters:
     * It helps the reviewer understand why you are separating different code blocks.
-    * If the comment is meaningless you'll realize that it was an unnecessary line break.
+    * If the comment is meaningless, you’ll realize that it was an unnecessary line break.
     For example, imagine you are defining a fancy neural network as a `pytorch.nn.Module`:
     ```python
     super().__init__()
@@ -84,8 +130,8 @@ If you want to separate different code blocks inside the same function there are
     self.layer_3 = torch.nn.Linear(in_dim, out_dim)
     self.layer_4 = torch.nn.Linear(out_dim, in_dim)
     ```
-    To understand if the blank lines you wrote to separate different code blocks are useful,
-     you could write a comment to separate the different blocks:
+    To understand if the blank lines you wrote to separate different code blocks are useful, you 
+  could write a comment to separate the different blocks:
     ```python
     super().__init__()
     # Device definition
@@ -97,10 +143,7 @@ If you want to separate different code blocks inside the same function there are
     self.layer_3 = torch.nn.Linear(in_dim, out_dim)
     self.layer_4 = torch.nn.Linear(out_dim, out_dim)
     ```
-   When you do that you will realize that you almost spent more time reading the comments than the
-    code blocks that they separate, and that the "device" comment you wrote is extremely obvious for anyone that
-    is remotely familiar with `pytorch`. In that case, deleting taht blank line improves the 
-    readability of your code.
+   When you do that, you will realize that you almost spent more time reading the comments than the code blocks that they separate, and that the “device” comment you wrote is extremely obvious for anyone that is remotely familiar with `pytorch`. In that case, deleting that blank line improves the readability of your code.
      
     The comments about the blocks of your fancy neural network are indeed adding 
     some useful information, but there may be a better alternative. 
@@ -157,13 +200,12 @@ If you want to separate different code blocks inside the same function there are
 ## Pycharm tips
 
 1. Using [PyCharm](https://www.jetbrains.com/pycharm/download/#section=linux) as an IDE will help you highlight the most
- common mistakes amd help you enforce PEP8.
+ common mistakes and help you enforce PEP8.
 
 
 ## Example codebase
 
-Reading well-written Python code is also a way to improve your skills. Please avoid copying anything that has been written
-by a researcher; it will likely be a compendium of bad practices. Instead, take a look at any of the following projects:
+Reading well-written Python code is also a way to improve your skills. Please avoid copying anything written by a researcher; it will likely be a compendium of bad practices. Instead, look at any of the following projects:
 
 - [Django](https://github.com/django/django)
 
@@ -171,7 +213,7 @@ by a researcher; it will likely be a compendium of bad practices. Instead, take 
 
 - [Jinja 2](https://github.com/pallets/jinja)
 
-When it comes to Reinforcement Learning, please avoid at any cost using OpenAI baselines as an example.
+In Reinforcement Learning, please avoid at any cost using OpenAI baselines as an example.
 
 
 ## Resources
