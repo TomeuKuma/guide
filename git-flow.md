@@ -60,7 +60,7 @@ requested. When your PR is approved, rearrange all the commits to have a descrip
 #### Referencing pull requests and issues in GitHub 
 
 * Use `Cross Links` to [reference](https://docs.github.com/en/github/writing-on-github/autolinked-references-and-urls#issues-and-pull-requests) and connect different conversations within a repository. When commenting, type `#` to bring up a list of suggested __issues__ and __pull reqests__, and select the issue or pull request number to reference it. These references are automaically converted to shortened links to the issue or pull request. 
-* If you are opening a pull request that fixes the question proposed in an issue, add `closes #[issue number]` in the pull request message. This will close automatically the issue when the reviewer approves and merge the pull request.
+* If you are opening a pull request that fixes the question proposed in an issue, add `closes #[issue number]` in the pull request message. This will close automatically the issue when the reviewer approves and merges the pull request.
 
 ### 3.1 Avoiding cascading delays when submitting PRs that depend on one another
 If you want to submit several PRs that depend on one another, and you don’t want to wait for the revisions of the former to submit the latter, you can, as an exceptional measure, submit them without 
